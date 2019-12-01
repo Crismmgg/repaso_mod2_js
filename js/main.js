@@ -111,7 +111,7 @@ getServerData();
 
 const body = document.querySelector("body");
 let palettes = [];
-const favPalettes = [];
+let favPalettes = [];
 
 //LOCAL STORAGE (ejercicio 9)
 
@@ -130,6 +130,23 @@ function getLocalStorage() {
   }
 }
 
+//LOCAL STORAGE - Fav palettes
+
+function setFavLocalStorage() {
+  localStorage.setItem("favPalettes", JSON.stringify(favPalettes));
+}
+
+function getFavLocalStorage() {
+  const localStorageFavPalettes = JSON.parse(
+    localStorage.getItem("favPalettes")
+  );
+  if (localStorageFavPalettes !== null) {
+    favPalettes = localStorageFavPalettes;
+    paintPalettes();
+    listenPalettes();
+  }
+}
+
 //TRAER DATOS DE PALETAS DEL SERVIDOR (ejerc 5 y 6)
 
 function getServerPalettes() {
@@ -142,6 +159,7 @@ function getServerPalettes() {
     .then(function(serverData) {
       palettes = serverData.palettes;
       setLocalStorage();
+      setFavLocalStorage();
       paintPalettes();
       listenPalettes();
     })
@@ -214,6 +232,7 @@ function toggleFavs(ev) {
     favPalettes.push(clickedId);
     console.log("entonces lo meto");
   }
+  setFavLocalStorage();
   paintPalettes();
   listenPalettes();
 }
@@ -221,3 +240,4 @@ function toggleFavs(ev) {
 //TRAER DATOS DEL LOCAL STORAGE
 
 getLocalStorage();
+getFavLocalStorage();
